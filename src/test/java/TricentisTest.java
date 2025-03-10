@@ -1,5 +1,9 @@
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static java.lang.Double.parseDouble;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.openqa.selenium.By;
@@ -7,11 +11,29 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TricentisTest {
+    private static WebDriver driver;
+
+    @BeforeAll
+    public static void setup(){
+        driver = new ChromeDriver();
+    }
+
+    @BeforeEach
+    public void reset(){
+        driver.get("https://demowebshop.tricentis.com/");
+    }
+
+    @AfterAll
+    public static void teardown(){
+        // driver.quit();
+    }
+
     // @Test
     public void testTricentis() {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://demowebshop.tricentis.com/");
         System.out.println(driver.getTitle());
         System.out.println(driver.findElement(By.tagName("img")));
         System.out.println(driver.findElement(By.className("search-box-button")).getDomAttribute("value"));
@@ -29,8 +51,6 @@ public class TricentisTest {
      */
     //@Test
     public void searchComputingAndInternetBookTest() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://demowebshop.tricentis.com/");
         driver.findElement(By.name("q")).sendKeys("Computing and Internet");
         driver.findElement(By.className("search-box-button")).click();
         Thread.sleep(2000);
@@ -41,10 +61,8 @@ public class TricentisTest {
     // Navigera till sidan: https://demowebshop.tricentis.com/register
     //Fyll i registreringsformuläret
     //Kontrollera att du hamnar på en bekräftelsesida eller får ett meddelande som säger att kontot skapades.
-    @Test
+    //@Test
     public void registerTest() throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://demowebshop.tricentis.com/");
         driver.findElement(By.className("ico-register")).click();
         driver.findElement(By.id("gender-male")).click();
         driver.findElement(By.id("FirstName")).sendKeys("Ture");
@@ -58,4 +76,18 @@ public class TricentisTest {
         driver.quit();
     }
 
+    @Test
+    public void bookPrices(){
+        driver.findElement(By.linkText("Books")).click();
+        List<WebElement> books = driver.findElements(By.className("product-item"));
+        System.out.println(books.size());
+        for (WebElement book: books){
+            System.out.println(book.getText());
+            String[] textArray = book.getText().split("\n");
+            System.out.println(Arrays.toString(textArray));
+            double actualPrice = parseDouble(textArray[2]);
+            System.out.println(actualPrice);
+            assertTrue(0<actualPrice && actualPrice<500);
+        }
+    }
 }
