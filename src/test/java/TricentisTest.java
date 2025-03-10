@@ -79,7 +79,10 @@ public class TricentisTest {
     @Test
     public void bookPrices(){
         driver.findElement(By.linkText("Books")).click();
-        List<WebElement> books = driver.findElements(By.className("product-item"));
+        // List<WebElement> books = driver.findElements(By.className("product-item"));
+        // List<WebElement> books = driver.findElements(By.cssSelector(".product-item"));
+        List<WebElement> books = driver.findElements(By.cssSelector("[data-productid='79']"));
+
         System.out.println(books.size());
         for (WebElement book: books){
             System.out.println(book.getText());
