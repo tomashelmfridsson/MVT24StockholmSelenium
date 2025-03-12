@@ -93,4 +93,17 @@ public class TricentisTest {
             assertTrue(0<actualPrice && actualPrice<500);
         }
     }
+
+    @Test
+    public void categories(){
+        List<WebElement> categoriesElements = driver.findElements(By.cssSelector(".block-category-navigation a"));
+        System.out.println(categoriesElements.size());
+        for (WebElement element: categoriesElements){
+            System.out.println (element.getText() +" "+ element.getDomAttribute("href"));
+            if (element.getText().equals("Jewelry")){
+                element.click();
+                break;
+            }
+        }
+    }
 }
